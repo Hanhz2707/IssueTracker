@@ -1,8 +1,8 @@
-\*NavBAr comment
+<!-- Navbar file -->
 
 <!-- instead of repeating code, we use map method to loop through each links -->
 
-          ##<!-- Before -->
+<!-- Before -->
 
           {/* <li>
             <Link
@@ -21,7 +21,7 @@
             </Link>
           </li> */}
 
-          <!-- After -->
+<!-- After -->
 
                     {links.map((link) => (
             <li key={link.href}>
@@ -33,3 +33,20 @@
               </Link>
             </li>
           ))}
+
+<!-- ---------------------------------------------------------------------- -->
+
+                        // className={`${
+              //   link.href === currentPath
+              //     ? "text-zinc-900 font-bold  "
+              //     : "text-zinc-500"
+              // } hover:text-zinc-800 transition-colors`}
+
+<!-- Importing classnames packages to ease the complexity of the code incase the classname in the future will be too long -->
+
+                            className={classNames({
+                "text-zinc-900 font-bold": link.href === currentPath,
+                "text-zinc-500": link.href !== currentPath,
+                "hover:text-zinc-800": true,
+                "transition-colors": true,
+              })}
