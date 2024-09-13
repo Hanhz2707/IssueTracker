@@ -4,10 +4,12 @@ import IssueStatusBadge from "../components/IssueStatusBadge";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import IssueActions from "./IssueActions";
+import delay from "delay";
 
-const LoadingIssuesPage = () => {
+const LoadingIssuesPage = async () => {
   const issue = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+  await delay(10000);
   return (
     <>
       <IssueActions />
