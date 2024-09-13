@@ -18,7 +18,7 @@ import delay from "delay";
 
 type IssueForm = z.infer<typeof CreateIssueSchema>;
 
-const NewIssuePage = async () => {
+const NewIssuePage = () => {
   const router = useRouter();
   const {
     register,
@@ -32,8 +32,6 @@ const NewIssuePage = async () => {
 
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  await delay(2000);
 
   return (
     <>
