@@ -10,14 +10,14 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { error } from "console";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateIssueSchema } from "@/app/validationSchema";
+import { issueSchema } from "@/app/validationSchema";
 import { set, z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import delay from "delay";
 import { Issue } from "@prisma/client";
 
-type IssueFormData = z.infer<typeof CreateIssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 interface Props {
   issue?: Issue;
@@ -32,7 +32,7 @@ const IssueForm = ({ issue }: Props) => {
     formState: { errors },
   } = useForm<IssueFormData>({
     // allow to use external validation schema such as zod
-    resolver: zodResolver(CreateIssueSchema),
+    resolver: zodResolver(issueSchema),
   });
 
   const [error, setError] = useState("");
