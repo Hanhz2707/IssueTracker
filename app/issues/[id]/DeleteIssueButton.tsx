@@ -1,17 +1,26 @@
 "use client";
 
+import { ButtonIcon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
+import { set } from "zod";
 
 const DeleteIssueButton = ({ IssueID }: { IssueID: number }) => {
   const router = useRouter();
 
+  const [error, setError] = useState(false);
+
   const handleDelete = async () => {
-    await axios.delete(`/api/issues/${IssueID}`);
-    router.push("/issues");
-    router.refresh();
+    try {
+      setError(false);
+      await axios.delete(`/api/issues/${IssueID}`);
+      router.push("/issues");
+      router.refresh();
+    } catch (error) {
+      setError(true);
+    }
   };
 
   return (
@@ -39,6 +48,22 @@ const DeleteIssueButton = ({ IssueID }: { IssueID: number }) => {
               </Button>
             </AlertDialog.Action>
           </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+      <AlertDialog.Root open={error}>
+        <AlertDialog.Content>
+          <AlertDialog.Title>Error</AlertDialog.Title>
+          <AlertDialog.Description>
+            An unexpected error occured. Please try again later.
+          </AlertDialog.Description>
+          <Button
+            variant="soft"
+            color="gray"
+            mt={"2"}
+            onClick={() => setError(false)}
+          >
+            Confirm
+          </Button>
         </AlertDialog.Content>
       </AlertDialog.Root>
     </>
