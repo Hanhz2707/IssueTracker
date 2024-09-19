@@ -1,8 +1,9 @@
 import prisma from "@/prisma/client";
-import { Box, Grid } from "@radix-ui/themes";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
+import DeleteIssueButton from "./DeleteIssueButton";
 // We need to grab the id from the URL
 
 interface Props {
@@ -21,15 +22,19 @@ const IssueDetailPage = async ({ params }: Props) => {
   if (!issue) notFound();
 
   return (
-    <Grid columns={{ initial: "1", md: "2" }} gap={"2"}>
+    <Grid columns={{ initial: "1", sm: "5" }} gap={"2"}>
       {/* Left column */}
-      <Box>
+      {/* Take 4/5 columns */}
+      <Box className="md:col-span-4">
         <IssueDetail issue={issue} />
       </Box>
 
       {/* Right column */}
       <Box>
-        <EditIssueButton IssueID={issue.id} />
+        <Flex direction={"column"} gap={"4"}>
+          <EditIssueButton IssueID={issue.id} />
+          <DeleteIssueButton IssueID={issue.id} />
+        </Flex>
       </Box>
     </Grid>
   );
