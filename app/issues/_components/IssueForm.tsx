@@ -19,11 +19,7 @@ import { Issue } from "@prisma/client";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
-interface Props {
-  issue?: Issue;
-}
-
-const IssueForm = ({ issue }: Props) => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const router = useRouter();
   const {
     register,
@@ -38,6 +34,22 @@ const IssueForm = ({ issue }: Props) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const onSubmit = handleSubmit(async (data) => {
+    // Creating handling error
+    try {
+      setIsSubmitting(true);
+      if (issue) {
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      } else {
+        await axios.post("/api/issues", data);
+      }
+      router.push("/issues");
+    } catch (error) {
+      setIsSubmitting(false);
+      setError("An unexpected error occured. Please try again later.");
+    }
+  });
+
   return (
     <>
       <div className="max-w-xl">
@@ -49,20 +61,7 @@ const IssueForm = ({ issue }: Props) => {
             <Callout.Text color="red">{error}</Callout.Text>
           </Callout.Root>
         )}
-        <form
-          className="max-w-xl space-y-3"
-          onSubmit={handleSubmit(async (data) => {
-            // Creating handling error
-            try {
-              setIsSubmitting(true);
-              await axios.post("/api/issues", data);
-              router.push("/issues");
-            } catch (error) {
-              setIsSubmitting(false);
-              setError("An unexpected error occured. Please try again later.");
-            }
-          })}
-        >
+        <form className="max-w-xl space-y-3" onSubmit={onSubmit}>
           <TextField.Root
             defaultValue={issue?.title}
             placeholder="Title"
@@ -83,7 +82,8 @@ const IssueForm = ({ issue }: Props) => {
           <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
           <Button disabled={isSubmitting}>
-            Submit {isSubmitting && <Spinner />}
+            {issue ? "Update Issue" : "Submit"} {""}
+            {isSubmitting && <Spinner />}
           </Button>
         </form>
       </div>
