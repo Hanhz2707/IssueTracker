@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { set } from "zod";
 
-import delay from "delay";
-
 const DeleteIssueButton = ({ IssueID }: { IssueID: number }) => {
   const router = useRouter();
 
@@ -28,7 +26,7 @@ const DeleteIssueButton = ({ IssueID }: { IssueID: number }) => {
       setError(true);
     }
   };
-  delay(2000);
+
   return (
     <>
       <AlertDialog.Root>
