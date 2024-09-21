@@ -6,7 +6,15 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
 import classNames from "classnames";
-import { Box, Container, Flex } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Grid,
+  Text,
+} from "@radix-ui/themes";
 
 const NavBar = () => {
   const currentPath = usePathname();
@@ -51,7 +59,30 @@ const NavBar = () => {
             </Flex>
             <Box>
               {status === "authenticated" ? (
-                <Link href="/api/auth/signout">Sign out</Link>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger>
+                    <Avatar
+                      src={session.user?.image!}
+                      fallback="avatar picture"
+                      size={"2"}
+                      radius="full"
+                      className="cursor-pointer"
+                    />
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Group>
+                      <DropdownMenu.Label>
+                        <Flex direction={"column"}>
+                          <Text>{session.user?.name}</Text>
+                          <Text>{session.user?.email}</Text>
+                        </Flex>
+                      </DropdownMenu.Label>
+                      <DropdownMenu.Item>
+                        <Link href="/api/auth/signout">Sign out</Link>
+                      </DropdownMenu.Item>
+                    </DropdownMenu.Group>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
               ) : (
                 <Link href="/api/auth/signin">Sign in</Link>
               )}
