@@ -6,6 +6,7 @@ import IssueDetail from "./IssueDetail";
 import DeleteIssueButton from "./DeleteIssueButton";
 import { getServerSession } from "next-auth";
 import authOption from "@/app/auth/AuthOption";
+import AssigneSelect from "./AssigneSelect";
 // We need to grab the id from the URL
 
 interface Props {
@@ -37,6 +38,7 @@ const IssueDetailPage = async ({ params }: Props) => {
       {session && (
         <Box>
           <Flex direction={"column"} gap={"4"}>
+            <AssigneSelect />
             <EditIssueButton IssueID={issue.id} />
             <DeleteIssueButton IssueID={issue.id} />
           </Flex>
