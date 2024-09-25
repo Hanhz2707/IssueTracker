@@ -13,7 +13,7 @@ const NavLinks = () => {
     },
     {
       name: "Issues",
-      href: "/issues",
+      href: "/issues/list",
     },
   ];
   return (
