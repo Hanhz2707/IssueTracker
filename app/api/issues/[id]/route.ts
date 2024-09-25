@@ -1,5 +1,5 @@
 import authOption from "@/app/auth/AuthOption";
-import { issueSchema } from "@/app/validationSchema";
+import { patchIssueSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { request } from "http";
 import { getServerSession } from "next-auth";
@@ -11,18 +11,30 @@ export const PATCH = async (
     request: NextRequest,
     {params}: {params: {id: string}}) => {
 
-    const session = await getServerSession(authOption);
-
-    if(!session) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+// Checking authorization
+    // const session = await getServerSession(authOption);
+    // if(!session) {
+    //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // }
 
 
     const body = await request.json();
-    const validation = issueSchema.safeParse(body);
+    const validation = patchIssueSchema.safeParse(body);
     
     if(!validation.success) {
         return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
+
+    const {assignedToUserId, title, description} = body
+    if(assignedToUserId){
+        const user = await prisma.user.findUnique({
+            where: {id: assignedToUserId}
+        })
+
+        if(!user) {
+            return NextResponse.json({status: 400, message: "Invalid user"})
+        }
     }
 
     const issue = await prisma.issue.findUnique({
@@ -30,15 +42,15 @@ export const PATCH = async (
     })
 
     if(!issue) {
-        return NextResponse.json({status: 404, message: "Issue not found"})
+        return NextResponse.json({status: 404, message: "Invalid issue"})
     }
 
     const updatedIssue = await prisma.issue.update({
         where: {id: issue.id},
-        data: {title: body.title, description: body.description}
+        data: {title, description, assignedToUserId}
     })
 
-    return NextResponse.json(updatedIssue, { status: 200 });
+    return NextResponse.json(updatedIssue);
 
 }
 
