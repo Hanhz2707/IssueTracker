@@ -5,6 +5,7 @@ import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "@/app/components/Skeleton";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 
 const AssigneSelect = ({ issue }: { issue: Issue }) => {
@@ -23,10 +24,14 @@ const AssigneSelect = ({ issue }: { issue: Issue }) => {
 
   if (error) return null;
 
-  const valueChange = (userID: string) => {
-    axios.patch(`/api/issues/${issue.id}`, {
-      assignedToUserId: userID === "unassigned" ? null : userID,
-    });
+  const valueChange = async (userID: string) => {
+    try {
+      await axios.patch(`/api/issues/${issue.id}`, {
+        assignedToUserId: userID === "unassigned" ? null : userID,
+      });
+    } catch (error) {
+      toast.error("Failed to assigned.");
+    }
   };
 
   return (
@@ -46,6 +51,7 @@ const AssigneSelect = ({ issue }: { issue: Issue }) => {
           </Select.Group>
         </Select.Content>
       </Select.Root>
+      <Toaster />
     </>
   );
 };
