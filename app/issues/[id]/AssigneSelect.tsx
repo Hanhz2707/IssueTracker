@@ -13,7 +13,6 @@ const AssigneSelect = () => {
       const res = await fetch("/api/users");
       const data = await res.json();
       setUser(data);
-      console.log("is this data: ???", data);
       //   const { data } = await axios.get<User[]>("/api/users");
       //   setUser(data);
     };
